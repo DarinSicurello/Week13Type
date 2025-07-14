@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Delete for API</title>
+</head>
+<body>
+  
+</body>
+</html>
+<html>
+<body>
+ <h2>My Example Form POST and DELETE via JSON Api</h2>
+<button id="deleteBtn">Delete User</button>
+
+<script>
+  const deleteBtn = document.getElementById('deleteBtn');
+
+  deleteBtn.addEventListener('click', () => {
+  
+    fetch('https://reqres.in/api/login', {      //Login required to prevent 401 Error! 
+      method: 'POST',       
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': 'reqres-free-v1'   // API KEY IS REQUIRED NOW 
+      },
+      body: JSON.stringify({  
+        email: 'eve.holt@reqres.in',   // Required JSON data byreqres
+        password: 'cityslicka'
+      })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Login failed');
+      return res.json();
+    })
+    .then(data => {
+      console.log('Login token:', data.token);
+
+      // Step 2: DELETE request with token and API key
+      return fetch('https://reqres.in/api/users/2', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${data.token}`,
+          'x-api-key': 'reqres-free-v1'
+        }
+      });
+    })
+    .then(res => {
+      console.log('Delete response status:', res.status);
+      if (res.status === 204) {
+        console.log('✅ User deleted successfully (mock).');
+      } else {
+        console.error('❌ Unexpected status:', res.status);
+      }
+    })
+    .catch(err => {
+      console.error('❌ Error:', err.message);
+    });
+  });
+</script>
+<script type="module" src="./main.js"></script>
+</body>
+</html>

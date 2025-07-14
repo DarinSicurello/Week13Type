@@ -1,0 +1,1 @@
+export const API_KEY1 = 'reqres-free-v1' 
